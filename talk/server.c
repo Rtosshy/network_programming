@@ -20,7 +20,7 @@ int main() {
     struct hostent *shost;
     struct sockaddr_in me;
     struct sockaddr_in cl;
-    int s_waiting, s;
+    int s_waiting, s, s_b, s_l;
         union {
         unsigned int i;
         unsigned char c[4];
@@ -50,14 +50,14 @@ int main() {
     if((s_waiting = socket(AF_INET,SOCK_STREAM,0)) < 0)
     Err("socket");
 
-    if(bind(s_waiting,&me,sizeof(me)) == -1)
+    if(s_b = bind(s_waiting,&me,sizeof(me)) == -1)
     Err("bind");
 
     fprintf(stderr,"Successfully bound.\n");
     
 
     /* 接続の確立 */
-    if (listen(s_waiting, 1) < 0){
+    if (s_l = listen(s_waiting, 1) < 0){
         perror("listen");
         exit(1);
     }
@@ -65,7 +65,7 @@ int main() {
     len = sizeof(cl);
     s = accept(s_waiting,(struct sockaddr *)&cl,&len);
 
-
+    printf("s_w:%d s_b:%d s_l:%d s:%d\n",s_waiting, s_b, s_l, s);
     /* 対話のループ */
     do {
         int n;

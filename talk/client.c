@@ -1,4 +1,3 @@
-/* コネクション型 対話プログラム （サーバ） */
 #include<stdio.h>
 #include<stdlib.h>
 #include<sys/types.h>
@@ -18,7 +17,7 @@ char buf[BUFMAX];
 int main(int argc, char *argv[]) {
     struct hostent *shost;
     struct sockaddr_in me;
-    int s_waiting;
+    int s_waiting, s_c;
     union {
         unsigned int i;
         unsigned char c[4];
@@ -42,11 +41,11 @@ int main(int argc, char *argv[]) {
 
 
     /* 接続の確立 */
-    if (connect(s_waiting, (struct sockaddr *)&me, sizeof(me)) < 0) {
+    if ((s_c = connect(s_waiting, (struct sockaddr *)&me, sizeof(me))) < 0) {
         perror("connect");
         exit(1);
     }
-
+    printf("s_w:%d s_c:%d\n",s_waiting, s_c);
     /* 対話のループ */
     do {
         int n;
